@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 bool _running = true;
 
 void mainLoop(SendPort sendPort) async {
-  const double _fps = 60;
+  const double _fps = 50;
   const double _second = 1000;
   const double _updateTime = _second / _fps;
   double _updates = 0;
@@ -14,7 +14,7 @@ void mainLoop(SendPort sendPort) async {
   Stopwatch _timerWatch = Stopwatch();
   _timerWatch.start();
   while (_running) {
-    if (_loopWatch.elapsedMilliseconds > _updateTime) {
+    if (_loopWatch.elapsedMilliseconds >= _updateTime) {
       _updates++;
       _loopWatch.reset();
       sendPort.send(true);

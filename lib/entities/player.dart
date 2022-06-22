@@ -1,21 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_game/entities/entity.dart';
 import 'package:flutter_game/utilities/global_vars.dart';
 
 class Player extends Entity {
   Player() : super("player") {
-    x = 50;
-    y = 150;
+    x = GlobalVars.screenWidth / 2 - 25;
+    y = GlobalVars.screenHeight / 2 - 25;
   }
 
   double _angle = 0;
   double _degree = 0;
   bool isMoveLeft = false;
   bool isMoveRight = false;
-  double _speed = 3;
+  final double _speed = 3;
   bool isAcceleration = false;
 
   get getAngle => _angle;
@@ -26,9 +25,8 @@ class Player extends Entity {
         top: y,
         left: x,
         child: visible
-            ? Transform.rotate(angle: _angle, child: sprites.first)
+            ? Transform.rotate(angle: _angle, child: sprites[currentSprite])
             : const SizedBox());
-    throw UnimplementedError();
   }
 
   @override
@@ -39,24 +37,20 @@ class Player extends Entity {
     _angle = (_degree * 3.14) / 180;
     x += sin(_degree * 0.0175) * _speed;
     y -= cos(_degree * 0.0175) * _speed;
-    if (x < 0) {
-      x = 0;
-    }
-    if (y < 0) {
-      y = 0;
-    }
-    if (x > GlobalVars.screenWidth - 50) {
-      x = GlobalVars.screenWidth - 50;
-    }
-    if (y > GlobalVars.screenHeight - 50) {
-      y = GlobalVars.screenHeight - 50;
-    }
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x > GlobalVars.screenWidth - 50) x = GlobalVars.screenWidth - 50;
+    if (y > GlobalVars.screenHeight - 50) y = GlobalVars.screenHeight - 50;
     isMoveLeft = false;
     isMoveRight = false;
   }
 
   @override
-  void update() {
-    move();
+  void animate() {
+    if (isAcceleration) {
+      super.animate();
+    } else {
+      currentSprite = 0;
+    }
   }
 }
